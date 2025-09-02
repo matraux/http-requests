@@ -126,7 +126,7 @@ final class Requester
 				new Psr7Response(500, [], $exception->getMessage(), '1.1', $exception->getMessage());
 		}
 
-		return new Psr7Response(500, [], 'Invalid response data', '1.1', 'Invalid response  data');
+		return new Psr7Response(500, [], 'Invalid response data', '1.1', 'Invalid response data');
 	}
 
 	protected function sendBatch(RequestCollection $requests): ResponseCollection

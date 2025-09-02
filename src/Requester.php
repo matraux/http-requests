@@ -30,13 +30,13 @@ final class Requester
 	/** @var array<string,string|int|float|bool|null> */
 	public array $config = ['verify' => false] {
 		set(array $values) {
-	foreach ($values as $index => $value) {
-		if (!is_string($index)) {
-			throw new UnexpectedValueException(sprintf('Expected index type "string", "%s" given.', get_debug_type($index)));
-		} elseif (!is_scalar($value) && $value !== null) {
-			throw new UnexpectedValueException(sprintf('Expected value type "scalar|null", "%s" given.', get_debug_type($value)));
-		}
-	}
+			foreach ($values as $index => $value) {
+				if (!is_string($index)) {
+					throw new UnexpectedValueException(sprintf('Expected index type "string", "%s" given.', get_debug_type($index)));
+				} elseif (!is_scalar($value) && $value !== null) {
+					throw new UnexpectedValueException(sprintf('Expected value type "scalar|null", "%s" given.', get_debug_type($value)));
+				}
+			}
 
 			$this->config = $values;
 		}

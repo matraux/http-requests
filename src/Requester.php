@@ -138,12 +138,12 @@ final class Requester
 			$promises[$index] = $this->createPromise($request);
 		}
 
-		/** @var array<int|string,array{state:string,value?:ResponseInterface,reason?:GuzzleException}> $data */
-		$data = (array) Utils::settle($promises)->wait();
+		/** @var array<int|string,array{state:string,value?:ResponseInterface,reason?:GuzzleException}> $psrResponses */
+		$psrResponses = (array) Utils::settle($promises)->wait();
 
 		$responses = [];
-		foreach ($data as $index => $d) {
-			$response = $this->createResponse($d);
+		foreach ($psrResponses as $index => $psrResponse) {
+			$response = $this->createResponse($psrResponse);
 			$responses[$index] = Response::create($response, $requests[$index]);
 		}
 

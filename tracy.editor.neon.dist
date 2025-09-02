@@ -1,0 +1,4 @@
+tracy:
+	# editor: 'vscode-insiders://file/%file:%line'
+	# editor: 'vscode://file/%%file%%:%%line%%'
+	# editor: 'phpstorm://open?file=%file&line=%line'

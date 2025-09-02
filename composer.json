@@ -1,0 +1,56 @@
+{
+	"name": "matraux/json-orm",
+	"description": "A PHP 8.4+ library for building, batching, and sending HTTP requests with ergonomic collections and parallel execution, powered by Guzzle.",
+	"keywords": ["HTTP", "HTTP requests", "Guzzle", "MATRAUX"],
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Daniel Žůrek",
+			"email": "info@danielzurek.cz",
+			"homepage": "https://www.matraux.com"
+		}
+	],
+	"require": {
+		"php": "^8.4",
+		"guzzlehttp/guzzle": "^7.10"
+	},
+	"require-dev": {
+		"nette/tester": "^2.5",
+		"phpstan/phpstan": "^2.1",
+		"tracy/tracy": "^2.10",
+		"contributte/qa": "^0.3.2",
+		"nette/neon": "^3.4"
+	},
+	"autoload": {
+		"psr-4": {
+			"Matraux\\HttpRequests\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Matraux\\HttpRequestsTest\\": "tests"
+		}
+	},
+	"support": {
+		"issues": "https://github.com/matraux/http-requests/issues",
+		"source": "https://github.com/matraux/http-requests"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"scripts": {
+		"codesniffer": "\"vendor/bin/phpcs\" --standard=\"ruleset.xml\"",
+		"codefixer": "\"vendor/bin/phpcbf\" --standard=\"ruleset.xml\"",
+		"stan": "vendor/bin/phpstan analyse --configuration \"phpstan.neon\" --ansi",
+		"test": "vendor/bin/tester -s -p php --colors 1 -C tests/"
+	},
+	"scripts-descriptions": {
+		"codesniffer": "Run PHP Codesniffer. Usage: \"composer codesniffer {path to folder or file}\"",
+		"codefixer": "Run PHP Codefixer. Usage: \"composer codefixer {path to folder or file}\"",
+		"stan": "Run PHP Stan. Usage \"composer stan {path to folder or file}\"",
+		"test": "Run PHP application tests"
+	}
+}

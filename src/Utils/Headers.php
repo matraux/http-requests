@@ -2,12 +2,12 @@
 
 namespace Matraux\HttpRequests\Utils;
 
-use Countable;
 use ArrayAccess;
-use Traversable;
 use ArrayIterator;
+use Countable;
 use IteratorAggregate;
 use OutOfBoundsException;
+use Traversable;
 use UnexpectedValueException;
 
 /**
@@ -37,7 +37,7 @@ final class Headers implements IteratorAggregate, ArrayAccess, Countable
 
 	public function offsetExists(mixed $offset): bool
 	{
-		if(!is_string($offset)) {
+		if (!is_string($offset)) {
 			throw new UnexpectedValueException(sprintf('Expected offset type "string", "%s" given.', get_debug_type($offset)));
 		}
 
@@ -55,9 +55,9 @@ final class Headers implements IteratorAggregate, ArrayAccess, Countable
 
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		if(!is_string($offset)) {
+		if (!is_string($offset)) {
 			throw new UnexpectedValueException(sprintf('Expected offset type "string", "%s" given.', get_debug_type($offset)));
-		} elseif(!is_scalar($value) && $value !== null) {
+		} elseif (!is_scalar($value) && $value !== null) {
 			throw new UnexpectedValueException(sprintf('Expected value type "scalar|null", "%s" given.', get_debug_type($value)));
 		}
 

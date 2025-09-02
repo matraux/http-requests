@@ -2,13 +2,13 @@
 
 namespace Matraux\HttpRequests\Utils;
 
-use Countable;
-use Throwable;
 use ArrayAccess;
-use Traversable;
 use ArrayIterator;
+use Countable;
 use IteratorAggregate;
 use OutOfBoundsException;
+use Throwable;
+use Traversable;
 use UnexpectedValueException;
 
 /**
@@ -37,7 +37,7 @@ final class Events implements IteratorAggregate, ArrayAccess, Countable
 
 	public function offsetExists(mixed $offset): bool
 	{
-		if(!is_int($offset) && !is_string($offset)) {
+		if (!is_int($offset) && !is_string($offset)) {
 			throw new UnexpectedValueException(sprintf('Expected offset type "int|string", "%s" given.', get_debug_type($offset)));
 		}
 
@@ -55,13 +55,13 @@ final class Events implements IteratorAggregate, ArrayAccess, Countable
 
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		if($offset !== null && !is_int($offset) && !is_string($offset)) {
+		if ($offset !== null && !is_int($offset) && !is_string($offset)) {
 			throw new UnexpectedValueException(sprintf('Expected offset type "int|string|null", "%s" given.', get_debug_type($offset)));
-		} elseif(!is_callable($value)) {
+		} elseif (!is_callable($value)) {
 			throw new UnexpectedValueException(sprintf('Expected value type "callable", "%s" given.', get_debug_type($offset)));
 		}
 
-		if($offset === null) {
+		if ($offset === null) {
 			$this->events[] = $value;
 		} else {
 			$this->events[$offset] = $value;
@@ -80,7 +80,7 @@ final class Events implements IteratorAggregate, ArrayAccess, Countable
 
 	public function __invoke(mixed ...$arguments): void
 	{
-		foreach($this->events as $callable) {
+		foreach ($this->events as $callable) {
 			try {
 				$callable(...$arguments);
 			} catch (Throwable $th) {

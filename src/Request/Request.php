@@ -2,14 +2,15 @@
 
 namespace Matraux\HttpRequests\Request;
 
-use Stringable;
-use Matraux\HttpRequests\Utils\Events;
-use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use Matraux\HttpRequests\Utils\Events;
 use Matraux\HttpRequests\Utils\Headers;
+use Psr\Http\Message\ResponseInterface;
+use Stringable;
 
 final class Request
 {
+
 	public ?string $body = null;
 
 	public readonly Headers $headers;
@@ -26,7 +27,8 @@ final class Request
 
 	protected function __construct(
 		public readonly Method|string $method,
-		public readonly string|Stringable $uri )
+		public readonly string|Stringable $uri
+	)
 	{
 		$this->headers = Headers::create();
 		$this->onAfter = Events::create();

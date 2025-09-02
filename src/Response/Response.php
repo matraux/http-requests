@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Matraux\HttpRequests\Response;
 
@@ -11,7 +11,15 @@ final readonly class Response implements ResponseInterface
 
 	protected function __construct(
 		public ResponseInterface $psrResponse,
-		public Request $request) {}
+		public Request $request
+	)
+	{
+	}
+
+	public static function create(ResponseInterface $psrResponse, Request $request): static
+	{
+		return new static($psrResponse, $request);
+	}
 
 	public function getStatusCode(): int
 	{
@@ -83,8 +91,4 @@ final readonly class Response implements ResponseInterface
 		return static::create($this->psrResponse->withBody($body), $this->request);
 	}
 
-	public static function create(ResponseInterface $psrResponse, Request $request): static
-	{
-		return new static($psrResponse, $request);
-	}
 }

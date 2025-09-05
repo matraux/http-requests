@@ -1,38 +1,27 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Matraux\HttpRequestsTest\Server;
 
-use Throwable;
 use RuntimeException;
 use Symfony\Component\Process\Process;
+use Throwable;
 
 final class HttpServer
 {
-
-	protected Process $process
-	{
-		get => $this->process ??= new Process([
-			PHP_BINARY,
-			'-S',
-			sprintf('%s:%d', $this->host, $this->port),
-			'-t',
-			__DIR__,
-		]);
-	}
 
 	public private(set) string $host = '127.0.0.1';
 
 	public int $port
 	{
-		get => $this->port ??= (function(): int {
-			if(!$socket = stream_socket_server(sprintf('tcp://%s:0', $this->host), $code, $message)) {
+		get => $this->port ??= (function (): int {
+			if (!$socket = stream_socket_server(sprintf('tcp://%s:0', $this->host), $code, $message)) {
 				throw new RuntimeException(
 					is_string($message) ? $message : 'Unknown socket server error',
 					is_numeric($code) ? (int) $code : 0
 				);
 			}
 
-			if(!$authority = stream_socket_get_name($socket, false)) {
+			if (!$authority = stream_socket_get_name($socket, false)) {
 				throw new RuntimeException('Failed to obtain authority');
 			}
 
@@ -51,13 +40,19 @@ final class HttpServer
 		get => $this->url ??= sprintf('http://%s:%d', $this->host, $this->port);
 	}
 
-	protected function __construct()
+	protected Process $process
 	{
+		get => $this->process ??= new Process([
+			PHP_BINARY,
+			'-S',
+			sprintf('%s:%d', $this->host, $this->port),
+			'-t',
+			__DIR__,
+		]);
 	}
 
-	public static function create(): static
+	protected function __construct()
 	{
-		return new static();
 	}
 
 	public function __destruct()
@@ -69,9 +64,14 @@ final class HttpServer
 		}
 	}
 
+	public static function create(): static
+	{
+		return new static();
+	}
+
 	public function start(): static
 	{
-		if($this->process->isRunning()) {
+		if ($this->process->isRunning()) {
 			return $this;
 		}
 
@@ -83,7 +83,7 @@ final class HttpServer
 
 	public function stop(): static
 	{
-		if(!$this->process->isRunning()) {
+		if (!$this->process->isRunning()) {
 			return $this;
 		}
 

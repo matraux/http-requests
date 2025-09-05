@@ -6,7 +6,6 @@ use Matraux\HttpRequests\Request\Method;
 use Matraux\HttpRequests\Request\Request;
 use Tester\Assert;
 use Tester\TestCase;
-use Throwable;
 
 require_once __DIR__ . '/Bootstrap.php';
 
@@ -27,18 +26,18 @@ final class RequestTest extends TestCase
 
 	public function testMethod(): void
 	{
-		Assert::noError(function(){
+		Assert::noError(function (): void {
 			Request::create(Method::Get, '');
 		});
 
-		Assert::noError(function(){
+		Assert::noError(function (): void {
 			Request::create('GET', '');
 		});
 	}
 
 	public function testBody(): void
 	{
-		Assert::noError(function(){
+		Assert::noError(function (): void {
 			Request::create(Method::Get, '')->body = 'example string';
 		});
 	}

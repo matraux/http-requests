@@ -7,7 +7,6 @@ use Matraux\HttpRequests\Request\Request;
 use Matraux\HttpRequests\Request\RequestCollection;
 use Tester\Assert;
 use Tester\TestCase;
-use Throwable;
 
 require_once __DIR__ . '/Bootstrap.php';
 
@@ -21,7 +20,7 @@ final class RequestCollectionTest extends TestCase
 
 	public function testCreate(): void
 	{
-		Assert::noError(function(){
+		Assert::noError(function (): void {
 			RequestCollection::create();
 		});
 	}
@@ -31,7 +30,7 @@ final class RequestCollectionTest extends TestCase
 		$collection = RequestCollection::create();
 		$request = Request::create(Method::Get, '');
 
-		Assert::noError(function()use($collection, $request){
+		Assert::noError(function () use ($collection, $request): void {
 			$collection[1] = $request;
 			$collection['A'] = $request;
 			$collection[] = $request;
@@ -40,7 +39,7 @@ final class RequestCollectionTest extends TestCase
 		Assert::equal($request, $collection[1]);
 		Assert::equal($request, $collection['A']);
 
-		Assert::noError(function()use($collection){
+		Assert::noError(function () use ($collection): void {
 			unset($collection['A']);
 		});
 	}
@@ -51,7 +50,7 @@ final class RequestCollectionTest extends TestCase
 		$request = Request::create(Method::Get, '');
 		$collection[] = $request;
 
-		foreach($collection as $request) {
+		foreach ($collection as $request) {
 			Assert::type(Request::class, $request);
 		}
 	}

@@ -25,7 +25,7 @@ final class ResponseCollectionTest extends TestCase
 	{
 		Assert::noError(function (): void {
 			ResponseCollection::create([
-				Response::create(new Psr7Response(), Request::create(Method::Get, ''))
+				Response::create(new Psr7Response(), Request::create(Method::Get, '')),
 			]);
 		});
 	}
@@ -42,11 +42,11 @@ final class ResponseCollectionTest extends TestCase
 		Assert::equal($response, $collection[1]);
 		Assert::equal($response, $collection['A']);
 
-		Assert::exception(function () use($collection, $response): void {
+		Assert::exception(function () use ($collection, $response): void {
 			$collection[] = $response;
 		}, Throwable::class);
 
-		Assert::exception(function () use($collection): void {
+		Assert::exception(function () use ($collection): void {
 			unset($collection['A']);
 		}, Throwable::class);
 	}
@@ -56,7 +56,7 @@ final class ResponseCollectionTest extends TestCase
 		$response = Response::create(new Psr7Response(), Request::create(Method::Get, ''));
 		$collection = ResponseCollection::create([$response]);
 
-		foreach($collection as $response) {
+		foreach ($collection as $response) {
 			Assert::type(Response::class, $response);
 		}
 	}

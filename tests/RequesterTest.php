@@ -2,13 +2,13 @@
 
 namespace Matraux\HttpRequestsTest;
 
-use Tester\Assert;
-use Tester\TestCase;
-use Matraux\HttpRequests\Requester;
 use Matraux\HttpRequests\Request\Method;
 use Matraux\HttpRequests\Request\Request;
 use Matraux\HttpRequests\Request\RequestCollection;
+use Matraux\HttpRequests\Requester;
 use Matraux\HttpRequestsTest\Server\HttpServer;
+use Tester\Assert;
+use Tester\TestCase;
 
 require_once __DIR__ . '/Bootstrap.php';
 

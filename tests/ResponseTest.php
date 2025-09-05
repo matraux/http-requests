@@ -8,7 +8,6 @@ use Matraux\HttpRequests\Request\Request;
 use Matraux\HttpRequests\Response\Response;
 use Tester\Assert;
 use Tester\TestCase;
-use Throwable;
 
 require_once __DIR__ . '/Bootstrap.php';
 
@@ -19,7 +18,6 @@ Bootstrap::tester();
  */
 final class ResponseTest extends TestCase
 {
-
 
 	public function testCreate(): void
 	{

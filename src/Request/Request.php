@@ -19,10 +19,10 @@ final class Request
 
 	public readonly Events $onBefore;
 
-	/** @var Events<callable(GuzzleException $exception): void> */
+	/** @var Events<callable(GuzzleException $exception):void> */
 	public readonly Events $onFail;
 
-	/** @var Events<callable(ResponseInterface $response): void> */
+	/** @var Events<callable(ResponseInterface $response):void> */
 	public readonly Events $onSuccess;
 
 	protected function __construct(

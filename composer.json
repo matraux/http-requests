@@ -1,6 +1,6 @@
 {
 	"name": "matraux/json-orm",
-	"description": "A PHP 8.4+ library for building, batching, and sending HTTP requests with ergonomic collections and parallel execution, powered by Guzzle.",
+	"description": "A PHP 8.4+ library for creating and batching HTTP requests with type‑safe wrappers, event hooks, and ergonomic collections, powered by Guzzle and PSR‑7.",
 	"keywords": ["HTTP", "HTTP requests", "Guzzle", "MATRAUX"],
 	"type": "library",
 	"license": "MIT",

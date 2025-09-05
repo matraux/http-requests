@@ -13,13 +13,15 @@ use Matraux\HttpRequests\Request\Request;
 use Matraux\HttpRequests\Request\RequestCollection;
 use Matraux\HttpRequests\Response\Response;
 use Matraux\HttpRequests\Response\ResponseCollection;
+use Matraux\HttpRequests\Utils\Config;
 use Matraux\HttpRequests\Utils\Events;
 use Matraux\HttpRequests\Utils\Headers;
 use Psr\Http\Message\ResponseInterface;
-use UnexpectedValueException;
 
 final class Requester
 {
+
+	public readonly Config $config;
 
 	public readonly Headers $headers;
 
@@ -27,32 +29,15 @@ final class Requester
 
 	public readonly Events $onAfter;
 
-	/** @var array<string,string|int|float|bool|null> */
-	public array $config = ['verify' => false] {
-		set(array $values) {
-			foreach ($values as $index => $value) {
-				if (!is_string($index)) {
-					throw new UnexpectedValueException(sprintf('Expected index type "string", "%s" given.', get_debug_type($index)));
-				} elseif (!is_scalar($value) && $value !== null) {
-					throw new UnexpectedValueException(sprintf('Expected value type "scalar|null", "%s" given.', get_debug_type($value)));
-				}
-			}
-
-			$this->config = $values;
-		}
-	}
-
 	protected Client $client {
-		set(Client $value) {
-			$this->client = $value;
-		}
 		get {
-			return $this->client ?? new Client($this->config);
+			return $this->client ??= new Client(iterator_to_array($this->config));
 		}
 	}
 
 	protected function __construct()
 	{
+		$this->config = Config::create();
 		$this->headers = Headers::create();
 		$this->onAfter = Events::create();
 		$this->onBefore = Events::create();
@@ -63,28 +48,43 @@ final class Requester
 		return new static();
 	}
 
-	/**
-	 * @param array<string,string|int|bool> $value
-	 */
-	public function addConfig(array $value): static
-	{
-		$this->config = array_merge($this->config, $value);
-		$this->client = new Client($this->config);
-
-		return $this;
-	}
-
 	public function send(Request $request): Response
 	{
 		($this->onBefore)();
 
-		/** @var array{state:string,value?:ResponseInterface,reason?:GuzzleException} $data */
-		$data = $this->createPromise($request)->wait();
-		$response = $this->createResponse($data);
+		$promise = $this->createPromise($request);
+
+		/** @var array{state:string,value?:ResponseInterface,reason?:GuzzleException} $psrResponse */
+		$psrResponse = current((array) Utils::settle($promise)->wait());
+
+		$response = $this->createResponse($psrResponse);
 
 		($this->onAfter)();
 
 		return Response::create($response, $request);
+	}
+
+	public function sendBatch(RequestCollection $requests): ResponseCollection
+	{
+		($this->onBefore)();
+
+		$promises = [];
+		foreach ($requests as $index => $request) {
+			$promises[$index] = $this->createPromise($request);
+		}
+
+		/** @var array<int|string,array{state:string,value?:ResponseInterface,reason?:GuzzleException}> $psrResponses */
+		$psrResponses = (array) Utils::settle($promises)->wait();
+
+		$responses = [];
+		foreach ($psrResponses as $index => $psrResponse) {
+			$response = $this->createResponse($psrResponse);
+			$responses[$index] = Response::create($response, $requests[$index]);
+		}
+
+		($this->onAfter)();
+
+		return ResponseCollection::create($responses);
 	}
 
 	protected function createPromise(Request $request): PromiseInterface
@@ -127,29 +127,6 @@ final class Requester
 		}
 
 		return new Psr7Response(500, [], 'Invalid response data', '1.1', 'Invalid response data');
-	}
-
-	protected function sendBatch(RequestCollection $requests): ResponseCollection
-	{
-		($this->onBefore)();
-
-		$promises = [];
-		foreach ($requests as $index => $request) {
-			$promises[$index] = $this->createPromise($request);
-		}
-
-		/** @var array<int|string,array{state:string,value?:ResponseInterface,reason?:GuzzleException}> $psrResponses */
-		$psrResponses = (array) Utils::settle($promises)->wait();
-
-		$responses = [];
-		foreach ($psrResponses as $index => $psrResponse) {
-			$response = $this->createResponse($psrResponse);
-			$responses[$index] = Response::create($response, $requests[$index]);
-		}
-
-		($this->onAfter)();
-
-		return ResponseCollection::create($responses);
 	}
 
 }

@@ -31,7 +31,6 @@ final class Headers implements IteratorAggregate, ArrayAccess, Countable
 
 	public function getIterator(): Traversable
 	{
-		/** @var ArrayIterator<string,string> */
 		return new ArrayIterator($this->headers);
 	}
 

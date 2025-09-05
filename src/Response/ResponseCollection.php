@@ -78,7 +78,6 @@ final readonly class ResponseCollection implements IteratorAggregate, ArrayAcces
 
 	public function getIterator(): Traversable
 	{
-		/** @var ArrayIterator<int|string,Response> */
 		return new ArrayIterator($this->responses);
 	}
 

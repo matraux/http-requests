@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Matraux\HttpRequests\Request;
+namespace Matraux\HttpRequests\Utils;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -11,14 +11,14 @@ use Traversable;
 use UnexpectedValueException;
 
 /**
- * @implements IteratorAggregate<int|string,Request>
- * @implements ArrayAccess<int|string,Request>
+ * @implements IteratorAggregate<int|string,mixed>
+ * @implements ArrayAccess<int|string,mixed>
  */
-final class RequestCollection implements IteratorAggregate, ArrayAccess, Countable
+final class Config implements IteratorAggregate, ArrayAccess, Countable
 {
 
-	/** @var array<int|string,Request> */
-	protected array $requests = [];
+	/** @var array<int|string,mixed> */
+	protected array $configs = [];
 
 	protected function __construct()
 	{
@@ -29,9 +29,9 @@ final class RequestCollection implements IteratorAggregate, ArrayAccess, Countab
 		return new static();
 	}
 
-	public function count(): int
+	public function getIterator(): Traversable
 	{
-		return count($this->requests);
+		return new ArrayIterator($this->configs);
 	}
 
 	public function offsetExists(mixed $offset): bool
@@ -40,41 +40,39 @@ final class RequestCollection implements IteratorAggregate, ArrayAccess, Countab
 			throw new UnexpectedValueException(sprintf('Expected offset type "int|string", "%s" given.', get_debug_type($offset)));
 		}
 
-		return array_key_exists($offset, $this->requests);
+		return array_key_exists($offset, $this->configs);
 	}
 
-	public function offsetGet(mixed $offset): Request
+	public function offsetGet(mixed $offset): mixed
 	{
 		if (!$this->offsetExists($offset)) {
 			throw new OutOfBoundsException(sprintf('No such offset "%s"', $offset));
 		}
 
-		return $this->requests[$offset];
+		return $this->configs[$offset];
 	}
 
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
 		if ($offset !== null && !is_int($offset) && !is_string($offset)) {
 			throw new UnexpectedValueException(sprintf('Expected offset type "int|string|null", "%s" given.', get_debug_type($offset)));
-		} elseif (!$value instanceof Request) {
-			throw new UnexpectedValueException(sprintf('Expected value type "%s", "%s" given.', Request::class, get_debug_type($offset)));
 		}
 
 		if ($offset === null) {
-			$this->requests[] = $value;
+			$this->configs[] = $value;
 		} else {
-			$this->requests[$offset] = $value;
+			$this->configs[$offset] = $value;
 		}
 	}
 
 	public function offsetUnset(mixed $offset): void
 	{
-		unset($this->requests[$offset]);
+		unset($this->configs[$offset]);
 	}
 
-	public function getIterator(): Traversable
+	public function count(): int
 	{
-		return new ArrayIterator($this->requests);
+		return count($this->configs);
 	}
 
 }

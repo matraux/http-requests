@@ -20,7 +20,9 @@
 		"phpstan/phpstan": "^2.1",
 		"tracy/tracy": "^2.10",
 		"contributte/qa": "^0.3.2",
-		"nette/neon": "^3.4"
+		"nette/neon": "^3.4",
+		"nette/utils": "^4.0",
+		"symfony/process": "^7.3"
 	},
 	"autoload": {
 		"psr-4": {

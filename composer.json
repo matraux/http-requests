@@ -1,5 +1,5 @@
 {
-	"name": "matraux/json-orm",
+	"name": "matraux/http-requests",
 	"description": "A PHP 8.4+ library for creating and batching HTTP requests with type‑safe wrappers, event hooks, and ergonomic collections, powered by Guzzle and PSR‑7.",
 	"keywords": ["HTTP", "HTTP requests", "Guzzle", "MATRAUX"],
 	"type": "library",

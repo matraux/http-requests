@@ -1,4 +1,4 @@
-# MATRAUX JSON ORM
+# MATRAUX HTTP Requests
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/matraux/http-requests.svg?logo=packagist&logoColor=white)](https://packagist.org/packages/matraux/http-requests)
 [![Last release](https://img.shields.io/github/v/release/matraux/http-requests?display_name=tag&logo=github&logoColor=white)](https://github.com/matraux/http-requests/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?logo=open-source-initiative&logoColor=white)](LICENSE)

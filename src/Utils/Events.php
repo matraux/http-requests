@@ -58,7 +58,7 @@ final class Events implements IteratorAggregate, ArrayAccess, Countable
 		if ($offset !== null && !is_int($offset) && !is_string($offset)) {
 			throw new UnexpectedValueException(sprintf('Expected offset type "int|string|null", "%s" given.', get_debug_type($offset)));
 		} elseif (!is_callable($value)) {
-			throw new UnexpectedValueException(sprintf('Expected value type "callable", "%s" given.', get_debug_type($offset)));
+			throw new UnexpectedValueException(sprintf('Expected value type "callable", "%s" given.', get_debug_type($value)));
 		}
 
 		if ($offset === null) {

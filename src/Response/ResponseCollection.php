@@ -68,7 +68,7 @@ final readonly class ResponseCollection implements IteratorAggregate, ArrayAcces
 
 	public function offsetSet(mixed $offset, mixed $value): void
 	{
-		throw new RuntimeException(sprintf('%s is read-only.', static::class));
+		throw new RuntimeException('Response collection is read-only.');
 	}
 
 	public function offsetUnset(mixed $offset): void

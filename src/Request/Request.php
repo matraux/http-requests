@@ -2,11 +2,11 @@
 
 namespace Matraux\HttpRequests\Request;
 
-use GuzzleHttp\Exception\GuzzleException;
+use Stringable;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Matraux\HttpRequests\Utils\Events;
 use Matraux\HttpRequests\Utils\Headers;
-use Psr\Http\Message\ResponseInterface;
-use Stringable;
+use GuzzleHttp\Exception\GuzzleException;
 
 final class Request
 {
@@ -22,7 +22,7 @@ final class Request
 	/** @var Events<callable(GuzzleException $exception):void> */
 	public readonly Events $onFail;
 
-	/** @var Events<callable(ResponseInterface $response):void> */
+	/** @var Events<callable(GuzzleResponse $response):void> */
 	public readonly Events $onSuccess;
 
 	protected function __construct(

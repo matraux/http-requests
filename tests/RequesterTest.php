@@ -41,9 +41,9 @@ final class RequesterTest extends TestCase
 		$response500 = $requester->send($request500);
 		$httpServer->stop();
 
-		Assert::equal(200, $response200->getStatusCode());
-		Assert::equal(403, $response403->getStatusCode());
-		Assert::equal(500, $response500->getStatusCode());
+		Assert::equal(200, $response200->code);
+		Assert::equal(403, $response403->code);
+		Assert::equal(500, $response500->code);
 	}
 
 	public function testSendBatch(): void
@@ -59,9 +59,9 @@ final class RequesterTest extends TestCase
 		$responses = $requester->sendBatch($requests);
 		$httpServer->stop();
 
-		Assert::equal(200, $responses[200]->getStatusCode());
-		Assert::equal(403, $responses[403]->getStatusCode());
-		Assert::equal(500, $responses[500]->getStatusCode());
+		Assert::equal(200, $responses[200]->code);
+		Assert::equal(403, $responses[403]->code);
+		Assert::equal(500, $responses[500]->code);
 	}
 
 }

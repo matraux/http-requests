@@ -2,93 +2,42 @@
 
 namespace Matraux\HttpRequests\Response;
 
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Matraux\HttpRequests\Request\Request;
-use Psr\Http\Message\ResponseInterface;
+use Matraux\HttpRequests\Utils\Headers;
 use Psr\Http\Message\StreamInterface;
 
-final readonly class Response implements ResponseInterface
+final readonly class Response
 {
 
+	public int $code;
+
+	public string $reason;
+
+	public string $protocolVersion;
+
+	public StreamInterface $body;
+
+	public Headers $headers;
+
 	protected function __construct(
-		public ResponseInterface $psrResponse,
+		GuzzleResponse $response,
 		public Request $request
 	)
 	{
+		$this->code = $response->getStatusCode();
+		$this->reason = $response->getReasonPhrase();
+		$this->protocolVersion = $response->getProtocolVersion();
+		$this->body = $response->getBody();
+		$headers = $this->headers = Headers::create();
+		foreach($response->getHeaders() as $index => $value) {
+			$headers[$index] = $value;
+		}
 	}
 
-	public static function create(ResponseInterface $psrResponse, Request $request): static
+	public static function create(GuzzleResponse $response, Request $request): static
 	{
-		return new static($psrResponse, $request);
-	}
-
-	public function getStatusCode(): int
-	{
-		return $this->psrResponse->getStatusCode();
-	}
-
-	public function withStatus(int $code, string $reasonPhrase = ''): static
-	{
-		return static::create($this->psrResponse->withStatus($code, $reasonPhrase), $this->request);
-	}
-
-	public function getReasonPhrase(): string
-	{
-		return $this->psrResponse->getReasonPhrase();
-	}
-
-	public function getProtocolVersion(): string
-	{
-		return $this->psrResponse->getProtocolVersion();
-	}
-
-	public function withProtocolVersion(string $version): static
-	{
-		return static::create($this->psrResponse->withProtocolVersion($version), $this->request);
-	}
-
-	public function getHeaders(): array
-	{
-		return $this->psrResponse->getHeaders();
-	}
-
-	public function hasHeader(string $name): bool
-	{
-		return $this->psrResponse->hasHeader($name);
-	}
-
-	public function getHeader(string $name): array
-	{
-		return $this->psrResponse->getHeader($name);
-	}
-
-	public function getHeaderLine(string $name): string
-	{
-		return $this->psrResponse->getHeaderLine($name);
-	}
-
-	public function withHeader(string $name, $value): static
-	{
-		return static::create($this->psrResponse->withHeader($name, $value), $this->request);
-	}
-
-	public function withAddedHeader(string $name, $value): static
-	{
-		return static::create($this->psrResponse->withAddedHeader($name, $value), $this->request);
-	}
-
-	public function withoutHeader(string $name): static
-	{
-		return static::create($this->psrResponse->withoutHeader($name), $this->request);
-	}
-
-	public function getBody(): StreamInterface
-	{
-		return $this->psrResponse->getBody();
-	}
-
-	public function withBody(StreamInterface $body): static
-	{
-		return static::create($this->psrResponse->withBody($body), $this->request);
+		return new static($response, $request);
 	}
 
 }

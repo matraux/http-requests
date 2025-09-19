@@ -7,17 +7,18 @@ use ArrayIterator;
 use Countable;
 use IteratorAggregate;
 use OutOfBoundsException;
+use Stringable;
 use Traversable;
 use UnexpectedValueException;
 
 /**
- * @implements IteratorAggregate<string,string>
- * @implements ArrayAccess<string,string>
+ * @implements IteratorAggregate<string,array<string>>
+ * @implements ArrayAccess<string,array<string>>
  */
 final class Headers implements IteratorAggregate, ArrayAccess, Countable
 {
 
-	/** @var array<string,string> */
+	/** @var array<string,array<string>> */
 	protected array $headers = [];
 
 	protected function __construct()
@@ -43,7 +44,10 @@ final class Headers implements IteratorAggregate, ArrayAccess, Countable
 		return array_key_exists($offset, $this->headers);
 	}
 
-	public function offsetGet(mixed $offset): string
+	/**
+	 * @return array<string>
+	 */
+	public function offsetGet(mixed $offset): array
 	{
 		if (!$this->offsetExists($offset)) {
 			throw new OutOfBoundsException(sprintf('No such offset "%s"', $offset));
@@ -56,11 +60,11 @@ final class Headers implements IteratorAggregate, ArrayAccess, Countable
 	{
 		if (!is_string($offset)) {
 			throw new UnexpectedValueException(sprintf('Expected offset type "string", "%s" given.', get_debug_type($offset)));
-		} elseif (!is_scalar($value) && $value !== null) {
-			throw new UnexpectedValueException(sprintf('Expected value type "scalar|null", "%s" given.', get_debug_type($value)));
+		} elseif (!is_array($value) || !static::isStrings($value)) {
+			throw new UnexpectedValueException(sprintf('Expected value type "array<string>", "%s" given.', get_debug_type($value)));
 		}
 
-		$this->headers[$offset] = (string) $value;
+		$this->headers[$offset] = $value;
 	}
 
 	public function offsetUnset(mixed $offset): void
@@ -71,6 +75,32 @@ final class Headers implements IteratorAggregate, ArrayAccess, Countable
 	public function count(): int
 	{
 		return count($this->headers);
+	}
+
+	public function add(string $name, string|int|float|bool|Stringable $value): static
+	{
+		$this->headers[$name][] = (string) $value;
+
+		return $this;
+	}
+
+	/**
+	 *
+	 * @param array<mixed> $values
+	 */
+	protected static function isStrings(array $values): bool
+	{
+		if (!array_is_list($values)) {
+			return false;
+		}
+
+		foreach ($values as $value) {
+			if (!is_string($value)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 }
